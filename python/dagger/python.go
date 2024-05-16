@@ -6,43 +6,43 @@ import (
 )
 
 func (p *Python) WithVersion(
-// The image to use
-// +optional
-// +default="python"
+	// The image to use
+	// +optional
+	// +default="python"
 	image string,
-// The version of Python to use
+	// The version of Python to use
 	version string,
-// Additional APT packages to install
-// +optional
-// +default=[]
+	// Additional APT packages to install
+	// +optional
+	// +default=[]
 	packages []string,
-// Enable caching for the container
-// +optional
-// +default=true
+	// Enable caching for the container
+	// +optional
+	// +default=true
 	cacheEnabled bool,
-// Commands to run in the container
-// +optional
-// +default=[]
+	// Commands to run in the container
+	// +optional
+	// +default=[]
 	commands []string,
-// CA File to use for SSL
-// +optional
-// +default=null
+	// CA File to use for SSL
+	// +optional
+	// +default=null
 	caFile *File,
-// Pip index URL
-// +optional
-// +default="https://pypi.org/simple"
+	// Pip index URL
+	// +optional
+	// +default="https://pypi.org/simple"
 	pipIndexURL string,
-// http_proxy environment variable
-// +optional
-// +default=""
+	// http_proxy environment variable
+	// +optional
+	// +default=""
 	httpProxy string,
-// https_proxy environment variable
-// +optional
-// +default=""
+	// https_proxy environment variable
+	// +optional
+	// +default=""
 	httpsProxy string,
-// no_proxy environment variable
-// +optional
-// +default=""
+	// no_proxy environment variable
+	// +optional
+	// +default=""
 	noProxy string,
 ) *Python {
 	baseImage := fmt.Sprintf("%s:%s", image, version)
@@ -73,11 +73,11 @@ func (p *Python) setupBaseImage(baseImage string, pipIndexURL string) {
 func (p *Python) setupCAFile(caFile *File) {
 	if caFile != nil {
 		p.Ctr = p.Ctr.
-			WithEnvVariable("REQUESTS_CA_BUNDLE", ca_bundle_path).
-			WithEnvVariable("GRPC_DEFAULT_SSL_ROOTS_FILE_PATH", ca_bundle_path).
-			WithEnvVariable("CURL_CA_BUNDLE", ca_bundle_path).
-			WithEnvVariable("SSL_CERT_FILE", ca_bundle_path).
-			WithMountedFile(ca_bundle_path, caFile)
+			WithEnvVariable("REQUESTS_CA_BUNDLE", caBundlePath).
+			WithEnvVariable("GRPC_DEFAULT_SSL_ROOTS_FILE_PATH", caBundlePath).
+			WithEnvVariable("CURL_CA_BUNDLE", caBundlePath).
+			WithEnvVariable("SSL_CERT_FILE", caBundlePath).
+			WithMountedFile(caBundlePath, caFile)
 	}
 }
 
@@ -99,9 +99,9 @@ func (p *Python) setupProxyEnvVariables(
 
 func (p *Python) setupCaching(cacheEnabled bool) {
 	if cacheEnabled {
-		aptCacheDir := cache_root_dir + "/apt"
-		pipCacheDir := cache_root_dir + "/pip"
-		poetryCacheDir := cache_root_dir + "/pypoetry"
+		aptCacheDir := cacheRootDir + "/apt"
+		pipCacheDir := cacheRootDir + "/pip"
+		poetryCacheDir := cacheRootDir + "/pypoetry"
 
 		aptCache := dag.CacheVolume("apt-cache")
 		pipCache := dag.CacheVolume("pip-cache")
@@ -139,8 +139,8 @@ func (p *Python) setupWorkdir() {
 //func (p *Python) WithProductionImage(
 //	directory *Directory,
 //) *Container {
-//	aptCacheDir := cache_root_dir + "/apt"
-//	poetryCacheDir := cache_root_dir + "/pypoetry"
+//	aptCacheDir := cacheRootDir + "/apt"
+//	poetryCacheDir := cacheRootDir + "/pypoetry"
 //	ctr := dag.Container().
 //		From("debian:12-slim").
 //		WithEnvVariable("POETRY_HOME", "/usr/local").
@@ -164,9 +164,9 @@ func (p *Python) setupWorkdir() {
 //}
 
 func (p *Python) WithPackageManager(
-// The package manager to use
-// +optional
-// +default="pip"
+	// The package manager to use
+	// +optional
+	// +default="pip"
 	packageManager string,
 ) *Python {
 	switch packageManager {
@@ -178,9 +178,9 @@ func (p *Python) WithPackageManager(
 }
 
 func (p *Python) WithPip(
-// The version of pip to use
-// +optional
-// +default=""
+	// The version of pip to use
+	// +optional
+	// +default=""
 	version string,
 ) *Python {
 	p.Ctr = p.Ctr.Pipeline("python-pip")
@@ -191,13 +191,13 @@ func (p *Python) WithPip(
 }
 
 func (p *Python) WithPoetry(
-// The version of poetry to use
-// +optional
-// +default="1.6.1"
+	// The version of poetry to use
+	// +optional
+	// +default="1.6.1"
 	version string,
-// Additional poetry plugins to install
-// +optional
-// +default=[]
+	// Additional poetry plugins to install
+	// +optional
+	// +default=[]
 	plugins []string,
 ) *Python {
 	p.Ctr = p.Ctr.Pipeline("python-poetry")

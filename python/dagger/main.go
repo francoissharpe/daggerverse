@@ -17,9 +17,9 @@ package main
 import "context"
 
 const (
-	workdir        = "/opt/app"
-	cache_root_dir = "/var/cache"
-	ca_bundle_path = "/etc/ssl/certs/ca-certificates.crt"
+	workdir      = "/opt/app"
+	cacheRootDir = "/var/cache"
+	caBundlePath = "/etc/ssl/certs/ca-certificates.crt"
 )
 
 type Python struct {
