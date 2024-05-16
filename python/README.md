@@ -1,11 +1,15 @@
-## Start a static site built with mkdocs-material
-
+### Run a container with Python 3.11 and poetry
 ```shell
-dagger call with-mkdocs-material --src https://github.com/squidfunk/mkdocs-material#master with-static-site-container as-service up --ports 8080:80
+dagger -m github.com/francoissharpe/daggerverse/python@main call \
+  with-version --version 3.11 \
+  with-package-manager --package-manager poetry \
+  container terminal --cmd /bin/bash
 ```
 
-## Push the static site image to a registry
+### Build a python project
 
 ```shell
-dagger call with-mkdocs-material --src https://github.com/squidfunk/mkdocs-material#master with-static-site-container publish --address ttl.sh/$(uuidgen):1h
+dagger call with-version --version 3.11 \
+  with-pypa-build --src "https://github.com/francoissharpe/pekish.git#master" \
+  directory --path ./ entries
 ```
